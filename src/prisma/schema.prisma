@@ -1,0 +1,50 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  email   String   @unique
+  name    String?
+  password String 
+  roles Role[] @default([User])
+  ticketsAssigned String[]
+  ticketsCreated String[]
+}
+
+enum Role {
+  User
+  Admin
+  Engineer
+}
+
+model Ticket {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  title String
+  description String
+  ticketPriority Int @default(4)
+  status Status @default(OPEN)
+  assignee String @default("SYSTEM") // email of the person who create the ticket
+  assignedTo String? // email of that person whom ticket is assigned
+  clientName String // name of the company
+  createdBy String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+}
+
+enum Status {
+  OPEN
+  INPROGRESS
+  RESOLVED
+  ONHOLD
+  CANCELLED
+}
