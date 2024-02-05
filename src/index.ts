@@ -8,7 +8,7 @@ const prisma = new PrismaClient()
 
 
 
-import ServerConfig from "../src/config/server_config"
+import ServerConfig from "./config/server_config"
 import apiRouter from "./routes"
 import { isAdmin, isLoggedIn } from "./validators/auth_validator"
 
@@ -22,7 +22,7 @@ app.use(bodyParser.urlencoded({extended:true}))
 app.use(bodyParser.text())
 
 app.use("/api", apiRouter)
-app.get("/api/v1/ping", [isLoggedIn, isAdmin], (req : Request, res : Response) => {
+app.get("/api/v1/ping", (req : Request, res : Response) => {
     return res.json({mess: "validate request successfully"})
 })
 app.listen(ServerConfig.PORT, async () => {
